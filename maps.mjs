@@ -1,3 +1,5 @@
+// Image to text setup graciously provided by Marius (GameOn Student)
+
 const task = {
     uno: `
 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
