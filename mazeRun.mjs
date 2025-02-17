@@ -14,7 +14,7 @@ let currentCol = null;
 let currentDirection = 'W';
 const directions = ['N', 'E', 'S', 'W'];
 let currentDirectionIndex = 3;
-let map = task.five; // one, two, tree, four, five – different mazes == tasks. Also 'four' fails...
+let map = task.five; // one, two, three, four, five – different mazes == tasks. Also 'four' fails...
 
 function initialize() {
     grid = map.trim().split('\n').map(row => Array.from(row));
