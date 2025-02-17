@@ -6,7 +6,7 @@ const symbols = {
   path: '⬛',
   wall: '⬜'
 };
-const FRAME_RATE = 25; // Updates 40 times a second.
+const FRAME_RATE = 25; // 20 updates/sec
 
 let grid = [];
 let currentRow = null;
@@ -14,7 +14,7 @@ let currentCol = null;
 let currentDirection = 'W';
 const directions = ['N', 'E', 'S', 'W'];
 let currentDirectionIndex = 3;
-let map = task.uno; // uno, dos, tres, cuatro, cinco (1, 2, 3, 4, 5)
+let map = task.five; // one, two, tree, four, five – different mazes == tasks. Also 'four' fails...
 
 function initialize() {
     grid = map.trim().split('\n').map(row => Array.from(row));
@@ -29,6 +29,7 @@ function initialize() {
         }
       }
     }
+    console.log('Starting position (🚗) not found in maze');
   }
   
 function getDirection() {
@@ -96,23 +97,35 @@ async function navigate() {
             await new Promise(r => setTimeout(r, FRAME_RATE));
         }
 
-        let originalDirection = currentDirectionIndex;
-        let foundPath = false;
+        const originalDirection = currentDirectionIndex;
+        const directions = [];
 
         for (let i = 0; i < 4; i++) {
             turn();
-            await new Promise(r => setTimeout(r, FRAME_RATE/2));
+            if (peek() && Math.abs(currentDirectionIndex - originalDirection) !== 2) {
+                directions.push(currentDirectionIndex);
+            }
+        }
 
-            if (peek()) {
-                if (Math.abs(currentDirectionIndex - originalDirection) !== 2) {
-                    foundPath = true;
-                    break;
+        if (directions.length === 0) {
+            for (let i = 0; i < 4; i++) {
+                turn();
+                if (peek()) {
+                    directions.push(currentDirectionIndex);
                 }
             }
         }
 
-        if (!foundPath) {
-            console.log("Finish!"); // It never doesn't find a path, so this works as goal post, lol.
+        if (directions.length > 0) {
+            const randomIndex = Math.floor(Math.random() * directions.length);
+            const targetDirection = directions[randomIndex];
+
+            while (currentDirectionIndex !== targetDirection) {
+                turn();
+                await new Promise(r => setTimeout(r, FRAME_RATE/2));
+            }
+        } else {
+            console.log("Finished!");
             break;
         }
     }
